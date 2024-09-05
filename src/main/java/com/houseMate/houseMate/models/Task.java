@@ -27,10 +27,10 @@ public class Task extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "id_user")
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_category")
     private Category category;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_status")
     private Status status;
 
