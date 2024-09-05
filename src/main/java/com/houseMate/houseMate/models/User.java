@@ -1,7 +1,6 @@
 package com.houseMate.houseMate.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,9 +9,11 @@ import java.time.LocalDate;
 
 @Getter @Setter
 @Entity
-@Table(name="user")
+@Table(name="app_user")
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     public int id;
     public String name;
     public String lastName;

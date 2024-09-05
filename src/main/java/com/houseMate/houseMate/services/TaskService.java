@@ -1,47 +1,115 @@
 package com.houseMate.houseMate.services;
 
-import com.houseMate.houseMate.models.Task;
-import com.houseMate.houseMate.repositories.TaskRepository;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+
+import com.houseMate.houseMate.models.Task;
+import com.houseMate.houseMate.repositories.ITaskRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+import com.houseMate.houseMate.models.Category;
+import com.houseMate.houseMate.models.Status;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@SpringBootApplication
-public class TaskService {
+@Service
+public class TaskService implements ITaskService {
 
-    private final TaskRepository taskRepository;
+    @Autowired
+    private ITaskRepository repoTask;
 
-    public TaskService(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Override
+    public List<Task> getTasks() {
+       return repoTask.findAllByOrderByIdAsc();
+
     }
 
-    public List<Task> getTasks(){
-        return taskRepository.findAllByOrderByIdAsc();
+    @Override
+    public Optional<Task> getTaskById(int id) {
+        return repoTask.findById(id);
     }
 
-    public Optional<Task> getTaskById(int id){
-        return taskRepository.findById(id);
+    @Override
+    public void saveTask(Task task) {
+        repoTask.save(task);
     }
 
-    public void saveTask (Task task){
-        taskRepository.save(task);
-    }
-
-    public boolean updateTask ( int id, Task task){
-        if (taskRepository.existsById(id)){
+    @Override
+    public boolean updateTask(int id, Task task) {
+        if (repoTask.existsById(id)) {
             task.setId(id);
-            taskRepository.save(task);
+            repoTask.save(task);
+            return true;
+        }
+        return false;
+    }
+    @Override
+    @Transactional
+    public boolean patchTask(int id, String title, String description, Integer categoryId, Integer statusId, LocalDate entryDate, LocalDate deadlineDate) {
+        Task task = repoTask.findById(id).orElse(null);
+
+        if (task != null) {
+            if (title != null) {
+                task.setTitle(title);
+            }
+
+            if (description != null) {
+                task.setDescription(description);
+            }
+
+            if (categoryId != null) {
+                Category category = entityManager.find(Category.class, categoryId);
+                if (category != null) {
+                    task.setCategory(category);
+                } else {
+
+                }
+            }
+
+            if (statusId != null) {
+                Status status = entityManager.find(Status.class, statusId);
+                if (status != null) {
+                    task.setStatus(status);
+                } else {
+
+                }
+            }
+
+            if (entryDate != null) {
+                task.setEntry_date(entryDate);
+            }
+
+            if (deadlineDate != null) {
+                task.setDeadline_date(deadlineDate);
+            }
+
+
+            repoTask.save(task);
+            return true;
+        }
+
+
+        return false;
+    }
+
+
+    @Override
+    public boolean deleteTask(int id) {
+        if (repoTask.existsById(id)) {
+            repoTask.deleteById(id);
             return true;
         }
         return false;
     }
 
-    public boolean deleteTask ( int id){
-        if ( taskRepository.existsById(id)){
-            taskRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
 }
+
+
+
