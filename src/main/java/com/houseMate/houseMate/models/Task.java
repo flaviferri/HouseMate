@@ -1,12 +1,15 @@
 package com.houseMate.houseMate.models;
 
 
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
+
+
 @Setter
 @Getter
 @Entity
@@ -19,11 +22,20 @@ public class Task extends BaseEntity{
     private int id;
     private String title;
     private String description;
-    private int category;
-    private int status;
-
-
-
+    public LocalDate entry_date;
+    public LocalDate deadline_date;
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    private User user;
+    @ManyToOne
+    @JoinColumn(name = "id_category")
+    private Category category;
+    @ManyToOne
+    @JoinColumn(name="id_status")
+    private Status status;
 
 
 }
+
+
+
