@@ -1,7 +1,6 @@
 package com.houseMate.houseMate.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,9 +9,11 @@ import java.time.LocalDate;
 
 @Getter @Setter
 @Entity
-@Table(name="user")
+@Table(name="app_user")
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int id;
     public String name;
     public String lastName;
@@ -23,17 +24,6 @@ public class User {
     public LocalDate departure_date;
 
     public User(){}
-    public User(int id , String name, String lastName, String email, String password, LocalDate birth_day, LocalDate entry_date, LocalDate departure_date){
 
-        this.id = id;
-        this.name= name;
-        this.lastName= lastName;
-        this.email=email;
-        this.password= password;
-        this.birth_day= birth_day;
-        this.entry_date= entry_date;
-        this.departure_date=departure_date;
-
-    }
 
 }
