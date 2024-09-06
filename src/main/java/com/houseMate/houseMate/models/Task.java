@@ -22,7 +22,6 @@ public class Task extends BaseEntity{
     private int id;
     private String title;
     private String description;
-    public LocalDate entry_date;
     public LocalDate deadline_date;
     @ManyToOne
     @JoinColumn(name="user_id")
@@ -33,6 +32,8 @@ public class Task extends BaseEntity{
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="status_id")
     private Status status;
+
+
 
 
 

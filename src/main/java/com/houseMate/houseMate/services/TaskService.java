@@ -1,20 +1,13 @@
 package com.houseMate.houseMate.services;
 
-
-
 import com.houseMate.houseMate.models.Task;
 import com.houseMate.houseMate.repositories.ITaskRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
-import com.houseMate.houseMate.models.Category;
-import com.houseMate.houseMate.models.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,13 +22,20 @@ public class TaskService implements ITaskService {
 
     @Override
     public List<Task> getTasks() {
-       return repoTask.findAllByOrderByIdAsc();
+       return repoTask.findAll();
 
     }
 
     @Override
-    public Optional<Task> getTaskById(int id) {
-        return repoTask.findById(id);
+    public ResponseEntity<Object> getTaskById(int id) {
+        Optional<Task> taskOptional = repoTask.findById(id);
+
+        if (taskOptional.isPresent()) {
+            Task task = taskOptional.get();
+            return new ResponseEntity<>(task, HttpStatus.OK);
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
     @Override
@@ -44,25 +44,24 @@ public class TaskService implements ITaskService {
         return new ResponseEntity <>(task,HttpStatus.CREATED);
 
     }
-
     @Override
-    public boolean updateTask(int id, Task task) {
+    public ResponseEntity<Task> updateTask(int id, Task task) {
         if (repoTask.existsById(id)) {
             task.setId(id);
-            repoTask.save(task);
-            return true;
+            Task updatedTask = repoTask.save(task);
+            return ResponseEntity.ok(updatedTask);
         }
-        return false;
+        return ResponseEntity.notFound().build();
     }
 
 
     @Override
-    public boolean deleteTask(int id) {
+    public ResponseEntity<Void> deleteTask(int id) {
         if (repoTask.existsById(id)) {
             repoTask.deleteById(id);
-            return true;
+            return ResponseEntity.noContent().build();
         }
-        return false;
+        return ResponseEntity.notFound().build();
     }
 
 }

@@ -1,4 +1,3 @@
-/*
 package com.houseMate.houseMate.models;
 
 
@@ -25,15 +24,5 @@ public class Flat {
 
 
     public Flat(){}
-    public Flat ( int id, String name, String street,int number, int floor,int postCode,int rooms ){
 
-        this.id=id;
-        this.name=name;
-        this.street=street;
-        this.number=number;
-        this.floor=floor;
-        this.postCode=postCode;
-        this.rooms=rooms;
-    }
 }
-*/
