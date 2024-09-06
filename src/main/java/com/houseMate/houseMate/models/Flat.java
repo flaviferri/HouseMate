@@ -5,12 +5,15 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
 
 @Table(name="flat")
-public class Flat {
+public class Flat extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,6 +24,9 @@ public class Flat {
     public int floor;
     public int postCode;
     public int rooms;
+    @OneToMany(mappedBy = "flat", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> tasks = new ArrayList<>();
+
 
 
     public Flat(){}

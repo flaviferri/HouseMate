@@ -32,6 +32,9 @@ public class Task extends BaseEntity{
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="status_id")
     private Status status;
+    @ManyToOne
+    @JoinColumn(name = "flat_id")
+    private Flat flat;
 
 
 
