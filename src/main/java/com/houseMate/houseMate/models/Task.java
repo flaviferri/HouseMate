@@ -16,23 +16,31 @@ import java.time.LocalDate;
 @Table(name="tasks")
 public class Task extends BaseEntity{
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-
     private int id;
     private String title;
     private String description;
     public LocalDate entry_date;
     public LocalDate deadline_date;
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name="user_id")
     private User user;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_category")
+    @JoinColumn(name = "category_id")
     private Category category;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="id_status")
+    @JoinColumn(name="status_id")
     private Status status;
+
+
+
+
+
+    public Task() {
+
+    }
 
 
 }

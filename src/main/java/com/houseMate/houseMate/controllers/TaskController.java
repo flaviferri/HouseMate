@@ -29,11 +29,11 @@ public class TaskController {
         return ResponseEntity.ok(tasks);
     }
 
-    @CrossOrigin(origins = "http://localhost:4001")
+
     @PostMapping("/create")
     public ResponseEntity<Object> saveTask(@RequestBody Task task) {
-        taskServ.saveTask(task);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return taskServ.saveTask(task);
+
     }
 
     @CrossOrigin(origins = "http://localhost:4001")
@@ -55,26 +55,6 @@ public class TaskController {
 
     }
 
-    @CrossOrigin(origins = "http://localhost:4001")
-    @PatchMapping("/{id}")
-    public ResponseEntity<String> patchTask(
-            @PathVariable("id") int id,
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) String description,
-            @RequestParam(required = false) Integer category,
-            @RequestParam(required = false) Integer status,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate entryDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate deadlineDate) {
-
-        boolean updated = taskServ.patchTask(id, title, description, category, status, entryDate, deadlineDate);
-
-        if (updated) {
-            return ResponseEntity.ok("Task updated successfully");
-        } else {
-            return ResponseEntity.status(404).body("Task not found");
-        }
-    }
-
 
     @CrossOrigin(origins = "http://localhost:4001")
     @GetMapping("/task/{id}")
@@ -86,6 +66,7 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found");
     }
 }
+
 
 
 

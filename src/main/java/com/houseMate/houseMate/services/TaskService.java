@@ -10,6 +10,8 @@ import jakarta.transaction.Transactional;
 import com.houseMate.houseMate.models.Category;
 import com.houseMate.houseMate.models.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -37,8 +39,10 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public void saveTask(Task task) {
+    public ResponseEntity<Object> saveTask(Task task) {
         repoTask.save(task);
+        return new ResponseEntity <>(task,HttpStatus.CREATED);
+
     }
 
     @Override
@@ -48,54 +52,6 @@ public class TaskService implements ITaskService {
             repoTask.save(task);
             return true;
         }
-        return false;
-    }
-    @Override
-    @Transactional
-    public boolean patchTask(int id, String title, String description, Integer categoryId, Integer statusId, LocalDate entryDate, LocalDate deadlineDate) {
-        Task task = repoTask.findById(id).orElse(null);
-
-        if (task != null) {
-            if (title != null) {
-                task.setTitle(title);
-            }
-
-            if (description != null) {
-                task.setDescription(description);
-            }
-
-            if (categoryId != null) {
-                Category category = entityManager.find(Category.class, categoryId);
-                if (category != null) {
-                    task.setCategory(category);
-                } else {
-
-                }
-            }
-
-            if (statusId != null) {
-                Status status = entityManager.find(Status.class, statusId);
-                if (status != null) {
-                    task.setStatus(status);
-                } else {
-
-                }
-            }
-
-            if (entryDate != null) {
-                task.setEntry_date(entryDate);
-            }
-
-            if (deadlineDate != null) {
-                task.setDeadline_date(deadlineDate);
-            }
-
-
-            repoTask.save(task);
-            return true;
-        }
-
-
         return false;
     }
 
