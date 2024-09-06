@@ -21,9 +21,13 @@ public class TaskService implements ITaskService {
     private EntityManager entityManager;
 
     @Override
-    public List<Task> getTasks() {
-       return repoTask.findAll();
+    public ResponseEntity<List<Task>> getTasks() {
+        List<Task> tasks = repoTask.findAll();
 
+        if (tasks.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(tasks);
     }
 
     @Override

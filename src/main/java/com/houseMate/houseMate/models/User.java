@@ -7,10 +7,11 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 
-@Getter @Setter
+@Getter
+@Setter
 @Entity
 @Table(name="app_user")
-public class User {
+public class User extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,7 +21,6 @@ public class User {
     public String email;
     public String password;
     public LocalDate birth_day;
-    public LocalDate entry_date;
     public LocalDate departure_date;
 
     public User(){}

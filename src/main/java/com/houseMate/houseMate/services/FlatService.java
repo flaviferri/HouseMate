@@ -5,9 +5,14 @@ import com.houseMate.houseMate.repositories.IFlatRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class FlatService implements IFlatService {
 
     @Autowired
@@ -17,38 +22,51 @@ public class FlatService implements IFlatService {
     private EntityManager entityManager;
 
     @Override
-    public List<Flat> getFlats() {
-        return repoFlat.findAllByOrderByIdAsc();
+    public  ResponseEntity<List<Flat>>getFlats() {
+        List<Flat> flat = repoFlat.findAll();
+            if(flat.isEmpty()){
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(flat);
     }
 
-    @Override
-    public Optional<Flat> getFlatById(int id) {
-        return repoFlat.findById(id);
-    }
 
     @Override
-    public void saveFlat(Flat flat) {
+    public ResponseEntity<Object> getFlatById(int id) {
+        Optional<Flat> flatOptional = repoFlat.findById(id);
+        if (flatOptional.isPresent()) {
+            Flat flat = flatOptional.get();
+            return new ResponseEntity<>(flat, HttpStatus.OK);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+
+    @Override
+    public ResponseEntity<Object> saveFlat(Flat flat) {
         repoFlat.save(flat);
+        return new ResponseEntity<>(flat,HttpStatus.CREATED);
 
     }
 
     @Override
-    public boolean updateFlat(int id, Flat flat) {
+    public ResponseEntity <Flat>updateFlat(int id, Flat flat) {
         if (repoFlat.existsById(id)) {
             flat.setId(id);
             repoFlat.save(flat);
-            return true;
+            Flat updateFlat = repoFlat.save(flat);
+           return ResponseEntity.ok(updateFlat);
         }
-        return false;
+        return ResponseEntity.notFound().build();
     }
 
     @Override
-    public boolean deleteFlat(int id) {
+    public ResponseEntity<Void> deleteFlat(int id) {
         if (repoFlat.existsById(id)) {
             repoFlat.deleteById(id);
-            return true;
+            return ResponseEntity.noContent().build();
         }
-        return false;
+        return ResponseEntity.notFound().build();
     }
 
 
