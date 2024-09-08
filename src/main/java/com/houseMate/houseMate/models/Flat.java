@@ -26,6 +26,10 @@ public class Flat extends BaseEntity{
     public int rooms;
     @OneToMany(mappedBy = "flat", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
+/*    @OneToMany
+    @JoinColumn(name = "user_id", nullable = false)
+    private User admin;*/
+
 
 
 

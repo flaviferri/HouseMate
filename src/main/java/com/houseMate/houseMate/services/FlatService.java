@@ -2,11 +2,13 @@ package com.houseMate.houseMate.services;
 
 import com.houseMate.houseMate.models.Flat;
 import com.houseMate.houseMate.repositories.IFlatRepository;
+import com.houseMate.houseMate.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +19,8 @@ public class FlatService implements IFlatService {
 
     @Autowired
     private IFlatRepository repoFlat;
+    @Autowired
+    private UserRepository userRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -42,12 +46,13 @@ public class FlatService implements IFlatService {
     }
 
 
-    @Override
+  @Override
     public ResponseEntity<Object> saveFlat(Flat flat) {
-        repoFlat.save(flat);
-        return new ResponseEntity<>(flat,HttpStatus.CREATED);
+      repoFlat.save(flat);
+      return new ResponseEntity<>(flat, HttpStatus.CREATED);
 
-    }
+  }
+
 
     @Override
     public ResponseEntity <Flat>updateFlat(int id, Flat flat) {

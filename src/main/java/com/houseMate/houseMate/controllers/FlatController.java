@@ -3,12 +3,14 @@ package com.houseMate.houseMate.controllers;
 
 import com.houseMate.houseMate.models.Flat;
 import com.houseMate.houseMate.services.IFlatService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class FlatController {
 
 
@@ -19,6 +21,7 @@ public class FlatController {
     public ResponseEntity <List<Flat>> getFlats(){
         return flatServ.getFlats();
     }
+
     @PostMapping("/flat/create")
     public ResponseEntity<Object>saveFlat(@RequestBody Flat flat){
         return flatServ.saveFlat(flat);
