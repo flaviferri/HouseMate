@@ -15,4 +15,7 @@ import lombok.Setter;
         private int id;
         private String description;
 
+    public Status(String description) {
+        this.description = description;
     }
+}

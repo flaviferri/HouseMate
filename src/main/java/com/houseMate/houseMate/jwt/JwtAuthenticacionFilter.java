@@ -21,7 +21,6 @@ import org.springframework.http.HttpHeaders;
 
 @Component
 @RequiredArgsConstructor
-
 public class JwtAuthenticacionFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;

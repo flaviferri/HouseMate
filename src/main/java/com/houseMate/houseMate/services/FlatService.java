@@ -46,12 +46,14 @@ public class FlatService implements IFlatService {
     }
 
 
-  @Override
+    @Override
     public ResponseEntity<Object> saveFlat(Flat flat) {
-      repoFlat.save(flat);
-      return new ResponseEntity<>(flat, HttpStatus.CREATED);
-
-  }
+        if (flat.getUser() == null) {
+            throw new IllegalArgumentException("User must be provided");
+        }
+        repoFlat.save(flat);
+        return new ResponseEntity<>(flat, HttpStatus.CREATED);
+    }
 
 
     @Override

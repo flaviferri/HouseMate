@@ -14,6 +14,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
+import javax.validation.constraints.*;
 
 
 @EqualsAndHashCode(callSuper = true)
@@ -28,17 +29,31 @@ public class User extends BaseEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public int id;
     @Column(nullable = false)
+    @NotEmpty(message = "The full name is required.")
     public String name;
     public String lastName;
+
+    @NotEmpty(message = "The email address is required.")
+    @Email(message = "The email address is invalid.", flags = { Pattern.Flag.CASE_INSENSITIVE })
     @Column(nullable = false, unique = true)
-    public String email;
+    private String email;
+
+    @NotEmpty(message = "The password is required.")
     @Column(nullable = false)
     public String password;
+
+    @NotNull(message = "The date of birth is required.")
+    @Past(message = "The date of birth must be in the past.")
     public LocalDate birth_day;
+
     public LocalDate departure_date;
+
     Role role;
 
-    public User(){}
+    public User(){
+        this.role = Role.USER;
+    }
+
 
 
 
