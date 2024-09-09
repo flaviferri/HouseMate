@@ -1,5 +1,6 @@
 package com.houseMate.houseMate.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.houseMate.houseMate.role.Role;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -11,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
@@ -45,13 +48,16 @@ public class User extends BaseEntity implements UserDetails {
     @NotNull(message = "The date of birth is required.")
     @Past(message = "The date of birth must be in the past.")
     public LocalDate birth_day;
-
     public LocalDate departure_date;
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    @JsonBackReference
+    private Set<Flat> flats;
 
     Role role;
 
     public User(){
-
+        this.role = Role.USER;
     }
 
 
