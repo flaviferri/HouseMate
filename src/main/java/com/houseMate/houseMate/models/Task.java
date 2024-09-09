@@ -33,7 +33,7 @@ public class Task extends BaseEntity{
     @JoinColumn(name="status_id")
     private Status status;
     @ManyToOne
-    @JoinColumn(name = "flat_id")
+    @JoinColumn(name = "flat_id", nullable = true)
     private Flat flat;
 
 
