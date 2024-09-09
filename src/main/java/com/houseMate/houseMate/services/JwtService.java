@@ -1,5 +1,7 @@
 package com.houseMate.houseMate.services;
 
+import com.houseMate.houseMate.config.JwtTokenProvider;
+import com.houseMate.houseMate.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,8 +19,15 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
+    private final JwtTokenProvider jwtTokenProvider;
+
 
     private static final String SECRET_KEY = "yqgTEsv0derhwlSrVeKd7W5p+CgIXRFsxNMmW62Hajs=";
+
+    public JwtService(JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
+
     public String getToken(UserDetails user) {
         return getToken(new HashMap<>(), user);
     }
@@ -39,8 +48,16 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-    public String getUsernameFromToken(String token) {
+  /*  public String getUsernameFromToken(String token) {
         return getClaim(token, Claims::getSubject);
+    }*/
+
+    public String getUsernameFromToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
@@ -70,5 +87,15 @@ public class JwtService {
         return getExpiration(token).before(new Date());
     }
 
+    public int getUserIdFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
+        return Integer.parseInt(claims.get("userId").toString());  // Extraer el userId del claim
+    }
+    public String getToken(User user) {
+        return jwtTokenProvider.generateToken(user.getUsername(), user.getId());
+    }
 }
 

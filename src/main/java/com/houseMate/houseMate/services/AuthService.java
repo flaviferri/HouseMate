@@ -1,5 +1,6 @@
 package com.houseMate.houseMate.services;
 
+import com.houseMate.houseMate.config.JwtTokenProvider;
 import com.houseMate.houseMate.controllers.AuthResponse;
 import com.houseMate.houseMate.controllers.LoginRequest;
 import com.houseMate.houseMate.controllers.RegisterRequest;
@@ -24,13 +25,15 @@ public class AuthService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private JwtTokenProvider jwtTokenProvider;
 
 
     public AuthResponse login(LoginRequest request) {
       authenticationManager
               .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword()));
-        UserDetails user = userRepository.findByEmail(request.getEmail()).orElseThrow();
-        String token = jwtService.getToken(user);
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        String token = jwtTokenProvider.generateToken(user.getEmail(), user.getId()); // Genera el token con userId
+
         return AuthResponse.builder()
                 .token(token)
                 .user(user)
