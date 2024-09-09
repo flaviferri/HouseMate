@@ -51,7 +51,7 @@ public class User extends BaseEntity implements UserDetails {
     Role role;
 
     public User(){
-        this.role = Role.USER;
+
     }
 
 
