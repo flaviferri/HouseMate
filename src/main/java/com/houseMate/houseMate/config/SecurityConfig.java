@@ -5,6 +5,7 @@ import com.houseMate.houseMate.jwt.JwtAuthenticacionFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,6 +13,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static com.houseMate.houseMate.role.Role.ADMIN;
+import static com.houseMate.houseMate.role.Role.USER;
 
 @Configuration
 @EnableWebSecurity
@@ -29,6 +33,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authRequest ->
                         authRequest
                                 .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/management/**").hasAnyRole(ADMIN.name(), USER.name())
+                                .requestMatchers(HttpMethod.GET,"/management/**/").hasAnyAuthority(ADMIN_READ.name())
                                 .anyRequest().authenticated()
                 )
                .sessionManagement(sessionManager ->

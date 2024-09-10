@@ -4,8 +4,6 @@ package com.houseMate.houseMate.controllers;
 import com.houseMate.houseMate.models.Flat;
 import com.houseMate.houseMate.services.IFlatService;
 import com.houseMate.houseMate.services.JwtService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
