@@ -42,13 +42,13 @@ public class FlatController {
     }
     @PostMapping("/flat/create")
     public ResponseEntity<Flat> saveFlat(@RequestBody Flat flat, @RequestHeader("Authorization") String token) {
-        String username = jwtService.extractUsernameFromToken(token); // Usa el servicio JWT
+        String username = jwtService.extractUsernameFromToken(token);
         return flatServ.saveFlat(flat, username);
     }
 
     @DeleteMapping("flat/{id}")
     public ResponseEntity<Void> deleteFlat(@PathVariable("id") int id, @RequestHeader("Authorization") String token){
-        String username = jwtService.extractUsernameFromToken(token); // Usa el servicio JWT
+        String username = jwtService.extractUsernameFromToken(token);
         return flatServ.deleteFlat(id, username);
     }
     @PutMapping("/flat/{id}")
@@ -57,7 +57,7 @@ public class FlatController {
     }
     @GetMapping("/flat/{id}")
     public ResponseEntity<Object> getFlatById(@PathVariable("id") int id, @RequestHeader("Authorization") String token){
-        String username = jwtService.extractUsernameFromToken(token); // Usa el servicio JWT
+        String username = jwtService.extractUsernameFromToken(token);
         return flatServ.getFlatById(id,username);
     }
 
