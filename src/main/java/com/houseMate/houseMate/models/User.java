@@ -54,7 +54,7 @@ public class User extends BaseEntity implements UserDetails {
     @JsonBackReference
     private Set<Flat> flats;
 
-    Role role;
+     Role role;
 
     public User(){
         this.role = Role.USER;

@@ -3,19 +3,26 @@ package com.houseMate.houseMate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.houseMate.houseMate.controllers.RegisterRequest;
 import com.houseMate.houseMate.models.Category;
 import com.houseMate.houseMate.models.Status;
 import com.houseMate.houseMate.repositories.ICategoryRepository;
 import com.houseMate.houseMate.repositories.IStatusRepository;
+import com.houseMate.houseMate.role.Role;
+import com.houseMate.houseMate.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
+
+import static com.houseMate.houseMate.role.Role.ADMIN;
+import static com.houseMate.houseMate.role.Role.USER;
 
 @SpringBootApplication
 public class HouseMateApplication {
@@ -64,8 +71,33 @@ public class HouseMateApplication {
 	public ObjectMapper objectMapper() {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-		mapper.registerModule(new JavaTimeModule()); // Para manejar LocalDateTime
+		mapper.registerModule(new JavaTimeModule());
 		return mapper;
+	}
+
+	@Bean
+	public CommandLineRunner commandLineRunner(
+			AuthService service
+	){
+		return args -> {
+			var admin = RegisterRequest.builder()
+					.name("Admin")
+					.lastname("Admin")
+					.email("admin@gmail.com")
+					.password("password")
+					.role(ADMIN)
+					.build();
+			System.out.println("Admin toke " + service.register(admin).getToken());
+			var user = RegisterRequest.builder()
+					.name("User")
+					.lastname("User")
+					.email("user@gmail.com")
+					.password("password")
+					.role(USER)
+					.build();
+			System.out.println("Admin toke " + service.register(admin).getToken());
+
+		};
 	}
 	}
 
