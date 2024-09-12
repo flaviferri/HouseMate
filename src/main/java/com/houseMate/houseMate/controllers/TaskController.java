@@ -1,71 +1,41 @@
 package com.houseMate.houseMate.controllers;
 
 import com.houseMate.houseMate.models.Task;
-import com.houseMate.houseMate.services.TaskService;
-import org.springframework.http.HttpStatus;
+import com.houseMate.houseMate.services.ITaskService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
+@RestController
 public class TaskController {
 
-private final TaskService taskService;
+    @Autowired
+    private ITaskService taskServ;
 
-    public TaskController(TaskService taskService) {
-        this.taskService = taskService;
+    @GetMapping("/tasks")
+    public ResponseEntity<List<Task>> getTasks() {
+        return taskServ.getTasks();
     }
-
-
-    @CrossOrigin(origins = "http://localhost:4001")
-    @GetMapping
-    public ResponseEntity<List <Task>> getTasks(){
-        List<Task> tasks = taskService.getTasks();
-        if(tasks.isEmpty()){
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(tasks);
+    @PostMapping("/task/create")
+    public ResponseEntity<Object> saveTask(@RequestBody Task task) {
+        return taskServ.saveTask(task);
     }
-
-    @CrossOrigin(origins = "http://localhost:4001")
-    @PostMapping("/create")
-    public ResponseEntity<Object> saveTask(@RequestBody Task task ){
-        taskService.saveTask(task);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    @DeleteMapping("/task/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable("id") int id) {
+        return taskServ.deleteTask(id);
     }
-
-    @CrossOrigin(origins = "http://localhost:4001")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteTask (@PathVariable("id") int id){
-        if(taskService.deleteTask(id)){
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
+    @PutMapping("/task/{id}")
+    public ResponseEntity<Task> updateTask(@PathVariable("id") int id, @RequestBody Task task) {
+        return taskServ.updateTask(id, task);
     }
-    @CrossOrigin(origins = "http://localhost:4001")
-    @PutMapping("/{id}")
-    public ResponseEntity<Object>updateTask(@PathVariable("id") int id, @RequestBody Task task) {
-        if (taskService.updateTask(id,task )) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
-
+    @GetMapping("/task/{id}")
+    public ResponseEntity<Object> getTaskById(@PathVariable("id") int id) {
+        return taskServ.getTaskById(id);
     }
-    @CrossOrigin(origins = "http://localhost:4001")
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> getTaskById(@PathVariable("id") int id){
-        Optional<Task> task = taskService.getTaskById(id);
-        if(task.isPresent()){
-            return ResponseEntity.ok(task.get());
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found");
-    }
-
-
-
-
 }
+
+
+
 
 
