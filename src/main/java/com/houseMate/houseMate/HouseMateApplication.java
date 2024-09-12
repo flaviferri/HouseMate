@@ -1,5 +1,8 @@
 package com.houseMate.houseMate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.houseMate.houseMate.models.Category;
 import com.houseMate.houseMate.models.Status;
 import com.houseMate.houseMate.repositories.ICategoryRepository;
@@ -57,5 +60,14 @@ public class HouseMateApplication {
 		};
 	};
 
-}
+	@Bean
+	public ObjectMapper objectMapper() {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+		mapper.registerModule(new JavaTimeModule()); // Para manejar LocalDateTime
+		return mapper;
+	}
+	}
+
+
 

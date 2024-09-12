@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,17 @@ public class JwtService {
     public String getToken(UserDetails user) {
         return getToken(new HashMap<>(), user);
     }
-
+    public String extractUsernameFromToken(String token) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey("yqgTEsv0derhwlSrVeKd7W5p+CgIXRFsxNMmW62Hajs=")
+                    .parseClaimsJws(token.replace("Bearer ", ""))
+                    .getBody();
+            return claims.getSubject();
+        } catch (SignatureException e) {
+            throw new RuntimeException("Invalid token");
+        }
+    }
     private String getToken(Map<String, Object> extraClaims, UserDetails user) {
         return Jwts
                 .builder()
@@ -69,6 +80,7 @@ public class JwtService {
     private boolean isTokenExpired(String token) {
         return getExpiration(token).before(new Date());
     }
+
 
 }
 

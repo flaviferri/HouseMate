@@ -8,8 +8,9 @@ import java.util.List;
 public interface IFlatService {
 
     ResponseEntity <List<Flat>> getFlats();
-    ResponseEntity<Object> getFlatById(int id);
-    ResponseEntity<Object> saveFlat(Flat flat);
+    ResponseEntity<List<Flat>> getFlatsByUserId(String username);
+    ResponseEntity<Object> getFlatById(int id, String userName);
+    ResponseEntity<Flat> saveFlat(Flat flat,  String username);
     ResponseEntity<Flat>updateFlat(int id ,Flat flat);
-    ResponseEntity<Void> deleteFlat (int id);
+    ResponseEntity<Void> deleteFlat (int id, String userName);
 }

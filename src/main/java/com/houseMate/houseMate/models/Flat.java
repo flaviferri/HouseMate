@@ -2,6 +2,8 @@ package com.houseMate.houseMate.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,10 +16,12 @@ import java.util.List;
 @Entity
 
 @Table(name="flat")
+@JsonIgnoreProperties({"user"})
 public class Flat extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+
     public int id;
     public String name;
     public String street;
@@ -29,7 +33,8 @@ public class Flat extends BaseEntity{
 
     private List<Task> tasks = new ArrayList<>();*/
  @ManyToOne(fetch = FetchType.EAGER)
- @JoinColumn(name = "user_id") // Asegúrate de que esta columna no permita valores nulos
+ @JoinColumn(name = "user_id")
+ @JsonManagedReference// Asegúrate de que esta columna no permita valores nulos
  private User user;
 
 /*    @OneToMany
