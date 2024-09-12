@@ -67,7 +67,7 @@ public class FlatService implements IFlatService {
             return ResponseEntity.ok(savedFlat);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(null); // O puedes lanzar una excepción personalizada
+                .body(null);
     }
 
 
