@@ -1,6 +1,7 @@
 package com.houseMate.houseMate.controllers;
 
 
+import com.houseMate.houseMate.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,5 +14,5 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 public class AuthResponse {
     String token;
-    UserDetails user;
+    User user;
 }

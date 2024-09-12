@@ -15,41 +15,43 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-
 @Service
 public class JwtService {
 
     private static final String SECRET_KEY = "yqgTEsv0derhwlSrVeKd7W5p+CgIXRFsxNMmW62Hajs=";
+
     public String getToken(UserDetails user) {
         return getToken(new HashMap<>(), user);
     }
+
     public String extractUsernameFromToken(String token) {
         try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey("yqgTEsv0derhwlSrVeKd7W5p+CgIXRFsxNMmW62Hajs=")
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(getKey())
+                    .build()
                     .parseClaimsJws(token.replace("Bearer ", ""))
                     .getBody();
             return claims.getSubject();
         } catch (SignatureException e) {
-            throw new RuntimeException("Invalid token");
+            throw new RuntimeException("Invalid token", e);
         }
     }
+
     private String getToken(Map<String, Object> extraClaims, UserDetails user) {
-        return Jwts
-                .builder()
+        return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
-
     }
 
     private Key getKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
     public String getUsernameFromToken(String token) {
         return getClaim(token, Claims::getSubject);
     }
@@ -60,8 +62,7 @@ public class JwtService {
     }
 
     private Claims getAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
+        return Jwts.parserBuilder()
                 .setSigningKey(getKey())
                 .build()
                 .parseClaimsJws(token)
@@ -80,7 +81,4 @@ public class JwtService {
     private boolean isTokenExpired(String token) {
         return getExpiration(token).before(new Date());
     }
-
-
 }
-

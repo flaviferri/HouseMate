@@ -54,6 +54,7 @@ public class User extends BaseEntity implements UserDetails {
     @JsonBackReference
     private Set<Flat> flats;
 
+    @Enumerated(EnumType.STRING)
      Role role;
 
     public User(){

@@ -87,7 +87,7 @@ public class HouseMateApplication {
 					.password("password")
 					.role(ADMIN)
 					.build();
-			System.out.println("Admin toke " + service.register(admin).getToken());
+			System.out.println("Admin token " + service.register(admin).getToken());
 			var user = RegisterRequest.builder()
 					.name("User")
 					.lastname("User")
@@ -95,7 +95,7 @@ public class HouseMateApplication {
 					.password("password")
 					.role(USER)
 					.build();
-			System.out.println("Admin toke " + service.register(admin).getToken());
+			System.out.println("User token " + service.register(user).getToken());
 
 		};
 	}

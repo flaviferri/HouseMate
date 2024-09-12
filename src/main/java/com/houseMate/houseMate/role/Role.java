@@ -15,28 +15,24 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public enum Role {
 
-    VISITOR(Collections.emptySet()),
-    ADMIN(
-            Set.of(
+    VISITOR(0, Collections.emptySet()),
+    ADMIN(1, Set.of(
+            Permission.ADMIN_CREATED,
+            Permission.ADMIN_UPDATE,
+            Permission.ADMIN_DELETE,
+            Permission.USER_GET,
+            Permission.USER_CREATED,
+            Permission.USER_UPDATE,
+            Permission.USER_DELETE
+    )),
+    USER(2, Set.of(
+            Permission.USER_GET,
+            Permission.USER_CREATED,
+            Permission.USER_UPDATE,
+            Permission.USER_DELETE
+    ));
 
-                    Permission.ADMIN_CREATED,
-                    Permission.ADMIN_UPDATE,
-                    Permission.ADMIN_DELETE,
-                    Permission.USER_GET,
-                    Permission.USER_CREATED,
-                    Permission.USER_UPDATE,
-                    Permission.USER_DELETE
-            )
-    ),
-    USER(
-            Set.of(
-                    Permission.USER_GET,
-                    Permission.USER_CREATED,
-                    Permission.USER_UPDATE,
-                    Permission.USER_DELETE
-            )
-    );
-
+    private final int id;
     private final Set<Permission> permissions;
 
     public List<SimpleGrantedAuthority> getAuthorities() {

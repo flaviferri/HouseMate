@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 
 
 @Service
@@ -29,7 +30,7 @@ public class AuthService {
     public AuthResponse login(LoginRequest request) {
         authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword()));
-        UserDetails user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
         String token = jwtService.getToken(user);
         return AuthResponse.builder()
                 .token(token)
@@ -39,6 +40,12 @@ public class AuthService {
     }
 
     public AuthResponse register(RegisterRequest request) {
+        Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
+
+        if (existingUser.isPresent()) {
+            throw new IllegalStateException("The email is already used");
+        }
+
         User user = User.builder()
                 .name(request.getName())
                 .lastName(request.getLastname())

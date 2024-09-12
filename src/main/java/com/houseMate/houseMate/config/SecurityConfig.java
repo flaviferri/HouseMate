@@ -1,6 +1,5 @@
 package com.houseMate.houseMate.config;
 
-
 import com.houseMate.houseMate.jwt.JwtAuthenticacionFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -35,20 +34,20 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authRequest ->
                         authRequest
                                 .requestMatchers("/auth/**").permitAll()
+
                                 .requestMatchers("/management/**").hasAnyRole(ADMIN.name(), USER.name())
-
-                                .requestMatchers(HttpMethod.GET,"/management/**/").hasAnyAuthority(ADMIN_READ.name(),USER_GET.name())
-                                .requestMatchers(HttpMethod.POST,"/management/**/").hasAnyAuthority(ADMIN_CREATED.name(),USER_CREATED.name())
-                                .requestMatchers(HttpMethod.DELETE,"/management/**/").hasAnyAuthority(ADMIN_DELETE.name(),USER_DELETE.name())
-                                .requestMatchers(HttpMethod.PUT,"/management/**/").hasAnyAuthority(ADMIN_UPDATE.name(),USER_UPDATE.name())
-
+                                .requestMatchers(HttpMethod.GET,"/management/**").hasAnyAuthority(ADMIN_READ.name(),USER_GET.name())
+                                .requestMatchers(HttpMethod.POST,"/management/**").hasAnyAuthority(ADMIN_CREATED.name(),USER_CREATED.name())
+                                .requestMatchers(HttpMethod.DELETE,"/management/**").hasAnyAuthority(ADMIN_DELETE.name(),USER_DELETE.name())
+                                .requestMatchers(HttpMethod.PUT,"/management/**").hasAnyAuthority(ADMIN_UPDATE.name(),USER_UPDATE.name())
                                 .requestMatchers("/management/**").hasRole(ADMIN.name())
 
 
-                                .requestMatchers(HttpMethod.GET,"/admin/**/").hasAuthority(ADMIN_READ.name())
-                                .requestMatchers(HttpMethod.POST,"/admin/**/").hasAuthority(ADMIN_CREATED.name())
-                                .requestMatchers(HttpMethod.DELETE,"/admin/**/").hasAuthority(ADMIN_DELETE.name())
-                                .requestMatchers(HttpMethod.PUT,"/admin/**/").hasAuthority(ADMIN_UPDATE.name())
+                                .requestMatchers("/admin/**").hasAnyRole(ADMIN.name())
+                                .requestMatchers(HttpMethod.GET,"/admin/**").hasAuthority(ADMIN_READ.name())
+                                .requestMatchers(HttpMethod.POST,"/admin/**").hasAuthority(ADMIN_CREATED.name())
+                                .requestMatchers(HttpMethod.DELETE,"/admin/**").hasAuthority(ADMIN_DELETE.name())
+                                .requestMatchers(HttpMethod.PUT,"/admin/**").hasAuthority(ADMIN_UPDATE.name())
 
                                 .anyRequest().authenticated()
                 )
