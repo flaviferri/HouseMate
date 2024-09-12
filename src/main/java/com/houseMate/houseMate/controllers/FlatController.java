@@ -7,6 +7,7 @@ import com.houseMate.houseMate.services.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class FlatController {
      public ResponseEntity<Object>saveFlat(@RequestBody Flat flat){
          return flatServ.saveFlat(flat);
      }*/
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/flats")
     public ResponseEntity<List<Flat>> getFlatsByUser(@RequestHeader("Authorization") String token) {
         String email = jwtService.extractUsernameFromToken(token);

@@ -8,6 +8,7 @@ import com.houseMate.houseMate.models.Category;
 import com.houseMate.houseMate.models.Status;
 import com.houseMate.houseMate.repositories.ICategoryRepository;
 import com.houseMate.houseMate.repositories.IStatusRepository;
+import com.houseMate.houseMate.repositories.UserRepository;
 import com.houseMate.houseMate.role.Role;
 import com.houseMate.houseMate.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,8 @@ public class HouseMateApplication {
 	ICategoryRepository iCategoryRepository;
 	@Autowired
 	IStatusRepository iStatusRepository;
+	@Autowired
+	UserRepository userRepository;
 
 	@Bean
 	public CommandLineRunner startup() {
@@ -80,22 +83,32 @@ public class HouseMateApplication {
 			AuthService service
 	){
 		return args -> {
-			var admin = RegisterRequest.builder()
-					.name("Admin")
-					.lastname("Admin")
-					.email("admin@gmail.com")
-					.password("password")
-					.role(ADMIN)
-					.build();
-			System.out.println("Admin token " + service.register(admin).getToken());
-			var user = RegisterRequest.builder()
-					.name("User")
-					.lastname("User")
-					.email("user@gmail.com")
-					.password("password")
-					.role(USER)
-					.build();
-			System.out.println("User token " + service.register(user).getToken());
+
+			if (!userRepository.existsByEmail("admin@gmail.com")) {
+				RegisterRequest admin = RegisterRequest.builder()
+						.name("Admin")
+						.lastname("Admin")
+						.email("admin@gmail.com")
+						.password("password")
+						.role(ADMIN)
+						.build();
+				System.out.println("Admin token " + service.register(admin).getToken());
+			} else {
+				System.out.println("Admin already exists.");
+			}
+
+			if (!userRepository.existsByEmail("user@gmail.com")) {
+				RegisterRequest user = RegisterRequest.builder()
+						.name("User")
+						.lastname("User")
+						.email("user@gmail.com")
+						.password("password")
+						.role(USER)
+						.build();
+				System.out.println("User token " + service.register(user).getToken());
+			} else {
+				System.out.println("User already exists.");
+			}
 
 		};
 	}

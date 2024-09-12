@@ -32,6 +32,7 @@ public class SecurityConfig {
        return http
                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authRequest ->
+
                         authRequest
                                 .requestMatchers("/auth/**").permitAll()
 
@@ -43,8 +44,8 @@ public class SecurityConfig {
                                 .requestMatchers("/management/**").hasRole(ADMIN.name())
 
 
-                                .requestMatchers("/admin/**").hasRole("ADMIN") // Acceso a endpoints /admin/** solo para ADMIN
-                                .requestMatchers(HttpMethod.GET,"/admin/**").hasAuthority(ADMIN_READ.name())
+                                .requestMatchers("/flats/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET,"/flats/create/**").hasAuthority(ADMIN_READ.name())
                                 .requestMatchers(HttpMethod.POST,"/admin/**").hasAuthority(ADMIN_CREATED.name())
                                 .requestMatchers(HttpMethod.DELETE,"/admin/**").hasAuthority(ADMIN_DELETE.name())
                                 .requestMatchers(HttpMethod.PUT,"/admin/**").hasAuthority(ADMIN_UPDATE.name())

@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.houseMate.houseMate.role.Role.USER;
+
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +58,7 @@ public class AuthService {
                     .password(passwordEncoder.encode(request.getPassword()))
                     .birth_day(request.getBirth_day())
                     .departure_date(request.getDeparture_date())
-                    .role(request.getRole())
+                    .role(USER)
                     .build();
             userRepository.save(user);
 
