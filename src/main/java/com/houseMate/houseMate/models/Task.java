@@ -24,7 +24,7 @@ public class Task extends BaseEntity{
     private String description;
     public LocalDate deadline_date;
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="app_user")
     private User user;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")

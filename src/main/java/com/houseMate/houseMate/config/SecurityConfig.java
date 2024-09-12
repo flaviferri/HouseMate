@@ -43,7 +43,7 @@ public class SecurityConfig {
                                 .requestMatchers("/management/**").hasRole(ADMIN.name())
 
 
-                                .requestMatchers("/admin/**").hasAnyRole(ADMIN.name())
+                                .requestMatchers("/admin/**").hasRole("ADMIN") // Acceso a endpoints /admin/** solo para ADMIN
                                 .requestMatchers(HttpMethod.GET,"/admin/**").hasAuthority(ADMIN_READ.name())
                                 .requestMatchers(HttpMethod.POST,"/admin/**").hasAuthority(ADMIN_CREATED.name())
                                 .requestMatchers(HttpMethod.DELETE,"/admin/**").hasAuthority(ADMIN_DELETE.name())

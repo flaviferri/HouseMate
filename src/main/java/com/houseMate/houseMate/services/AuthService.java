@@ -1,5 +1,6 @@
 package com.houseMate.houseMate.services;
 
+import ch.qos.logback.classic.Logger;
 import com.houseMate.houseMate.controllers.AuthResponse;
 import com.houseMate.houseMate.controllers.LoginRequest;
 import com.houseMate.houseMate.controllers.RegisterRequest;
@@ -25,6 +26,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private Logger logger;
 
 
     public AuthResponse login(LoginRequest request) {
@@ -39,27 +41,32 @@ public class AuthService {
 
     }
 
+
     public AuthResponse register(RegisterRequest request) {
-        Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
+        try {
+            Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
+            if (existingUser.isPresent()) {
+                throw new IllegalStateException("The email is already used");
+            }
 
-        if (existingUser.isPresent()) {
-            throw new IllegalStateException("The email is already used");
+            User user = User.builder()
+                    .name(request.getName())
+                    .lastName(request.getLastname())
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .birth_day(request.getBirth_day())
+                    .departure_date(request.getDeparture_date())
+                    .role(request.getRole())
+                    .build();
+            userRepository.save(user);
+
+            return AuthResponse.builder()
+                    .token(jwtService.getToken(user))
+                    .user(user)
+                    .build();
+        } catch (Exception exception) {
+            logger.error("Error occurred during user registration", exception);
+            throw new RuntimeException("An error occurred while registering the user", exception);
         }
-
-        User user = User.builder()
-                .name(request.getName())
-                .lastName(request.getLastname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .birth_day(request.getBirth_day())
-                .departure_date(request.getDeparture_date())
-                .role(request.getRole())
-                .build();
-        userRepository.save(user);
-
-        return AuthResponse.builder()
-                .token(jwtService.getToken(user))
-                .user(user)
-                .build();
     }
 }
